@@ -98,8 +98,8 @@ fragment事务回退栈（稍后会学习）。
 
 fragment事务被用来添加、移除、附加、分离或替换fragment队列中的fragment。这是使用fragment动态组装和重新组装用户界面的关键。FragmentManager 管理着fragment事务回退栈。  
  
-流接口   秀啊？？？  
+流接口   秀啊？？
 FragmentManager.beginTransaction() 方法创建并返回FragmentTransaction 实例。FragmentTransaction 类支持流接口 （fluent interface）的链式方法调用，以此配置FragmentTransaction 再返回它。   
 容器视图资源ID的作用有：  
 告诉FragmentManager ，fragment视图应该出现在activity视图的什么位置；
-唯一标识FragmentManager 队列中的fragment。
+唯一标识FragmentManager 队列中的fragment。 
