@@ -8,11 +8,12 @@
     - [3.1 继承Service](#31-%e7%bb%a7%e6%89%bfservice)
     - [3.2 继承IntentService](#32-%e7%bb%a7%e6%89%bfintentservice)
   - [4. Service绑定服务](#4-service%e7%bb%91%e5%ae%9a%e6%9c%8d%e5%8a%a1)
-    - [4.1 扩展`Binder`类 绑定服务](#41-%e6%89%a9%e5%b1%95binder%e7%b1%bb-%e7%bb%91%e5%ae%9a%e6%9c%8d%e5%8a%a1)
+    - [4.1 扩展`Binder`类通信](#41-%e6%89%a9%e5%b1%95binder%e7%b1%bb%e9%80%9a%e4%bf%a1)
       - [4.1.1 扩展 Binder 类](#411-%e6%89%a9%e5%b1%95-binder-%e7%b1%bb)
       - [4.1.2 实现 ServiceConnection接口](#412-%e5%ae%9e%e7%8e%b0-serviceconnection%e6%8e%a5%e5%8f%a3)
       - [4.1.3 调用 bindService()，传递 ServiceConnection 对象](#413-%e8%b0%83%e7%94%a8-bindservice%e4%bc%a0%e9%80%92-serviceconnection-%e5%af%b9%e8%b1%a1)
       - [4.1.4 调用 unbindService()断开与服务的连接。](#414-%e8%b0%83%e7%94%a8-unbindservice%e6%96%ad%e5%bc%80%e4%b8%8e%e6%9c%8d%e5%8a%a1%e7%9a%84%e8%bf%9e%e6%8e%a5)
+    - [4.2 使用AIDL通信](#42-%e4%bd%bf%e7%94%a8aidl%e9%80%9a%e4%bf%a1)
     - [4.2 绑定服务的生命周期](#42-%e7%bb%91%e5%ae%9a%e6%9c%8d%e5%8a%a1%e7%9a%84%e7%94%9f%e5%91%bd%e5%91%a8%e6%9c%9f)
     - [4.3 绑定时机](#43-%e7%bb%91%e5%ae%9a%e6%97%b6%e6%9c%ba)
   - [5. 前台Service](#5-%e5%89%8d%e5%8f%b0service)
@@ -192,7 +193,7 @@ public class StartIntentServiceActivity extends AppCompatActivity {
 
 
 ## 4. Service绑定服务 
-绑定可以让activity得到service的方法数据。
+**绑定为了让activity得到service的方法数据。**
 
 应用组件（客户端）通过调用 bindService() 绑定到服务，绑定是异步的，系统随后调用服务的 onBind() 方法，该方法返回用于与服务交互的 IBinder。要接收 IBinder，客户端必须提供一个 ServiceConnection 实例用于监控与服务的连接，并将其传递给 bindService()。当 Android 系统创建了客户端与服务之间的连接时，会回调ServiceConnection 对象的onServiceConnected()方法，向客户端传递用来与服务通信的IBinder
 
@@ -207,7 +208,7 @@ public class StartIntentServiceActivity extends AppCompatActivity {
 - 使用 AIDL  
 AIDL（Android 接口定义语言）执行所有将对象分解成原语的工作，操作系统可以识别这些原语并将它们编组到各进程中，以执行 IPC。 之前采用 Messenger 的方法实际上是以 AIDL 作为其底层结构。 如上所述，Messenger 会在单一线程中创建包含所有客户端请求的队列，以便服务一次接收一个请求。 不过，如果想让服务同时处理多个请求，则可直接使用 AIDL。 在此情况下，服务必须具备多线程处理能力，并采用线程安全式设计。如需直接使用 AIDL，必须创建一个定义编程接口的 .aidl 文件。Android SDK 工具利用该文件生成一个实现接口并处理 IPC 的抽象类，随后可在服务内对其进行扩展
 
-### 4.1 扩展`Binder`类 绑定服务
+### 4.1 扩展`Binder`类通信
 #### 4.1.1 扩展 Binder 类
 1. 在服务中创建一个可满足下列任一要求的 Binder 实例：
     - 包含客户端可调用的公共方法
@@ -341,6 +342,18 @@ public class BindServiceActivity extends AppCompatActivity {
 
 }
 ```
+### 4.2 使用AIDL通信
+使用AIDL跨进程通信，整体过程和单进程一样，都是通过一个Binder来通信的，区别在于单进程的Binder是自己通过继承Binder类来手动实现的，而跨进程的Binder是通过AIDL自动生成的，那是一个牛逼的Binder。
+
+activity调用service：
+
+生成AIDL--->IMyAidlInterface接口，里面声明要回调的方法MethodA
+在Service里，把要用到的内部类实现，继承IMyAidlInterface.Stub,里面实现MethodA（直接调用类里的方法也行）
+
+回调：  
+
+[Android Service基本用法、AIDL、Binder连接池详解](https://www.jianshu.com/p/243eb0a3c282)  
+
 
 ### 4.2 绑定服务的生命周期
 绑定服务的生命周期在同时启动服务的情况下比较特殊，想要终止服务，除了需要取消绑定服务外，还需要服务通过 stopSelf() 自行停止或其他组件调用 stopService()

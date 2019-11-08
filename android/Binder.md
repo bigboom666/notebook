@@ -75,3 +75,7 @@ Binder请求的线程管理
 ## Q&A
 Q: Android为什么不使用linux原有的一些手段，比如管道，共享内存，socket等方式，而是采用了Binder作为主要机制？  
 A: 效率，安全性。Binder只需要一次拷贝，性能仅次于共享内存，而且采用的传统的C/S结构，稳定性也是没得说，发送添加UID/PID，安全性高
+
+# 参考
+[Binder学习指南](http://weishu.me/2016/01/12/binder-index-for-newer/)  
+[Android跨进程通信：图文详解 Binder机制 原理](https://blog.csdn.net/carson_ho/article/details/73560642)  

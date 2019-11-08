@@ -1,0 +1,22 @@
+容器
+
+1. 缩放
+2. 旋转
+
+
+view
+adapter
+data
+
+
+怎么收到时间轴的数据？
+
+
+大图显示：
+ViewPager+Fragment适配器FragmentPagerAdapter中
+
+
+手势：
+自定义imageview   zoomImage extends ImageView
+
+
