@@ -11,12 +11,41 @@ data
 
 怎么收到时间轴的数据？
 
+视频，视频的播放
 
 大图显示：
 ViewPager+Fragment适配器FragmentPagerAdapter中
 
 
 手势：
-自定义imageview   zoomImage extends ImageView
+自定义imageview   zoomImageView extends ImageView
 
 
+
+
+
+
+
+imageLoader  单例
+Bitmap bitmap = AlbumBitmapCacheHelper.getInstance().getBitmap
+
+
+
+1. 读媒体库  整出照片     ---  arraylist
+
+
+
+
+内存泄漏
+
+
+intent传递数据，要换！！！
+
+这种方式涉及到数据存储，Android数据的四种持久化存储方式SharedPreferences、SQLite、Content Provider和File，该方式的缺点就是要占用本地的资源，优点是数据可以在多个Activity之间共享。
+
+
+
+https://github.com/Gloomyer/ZoomImageView
+ViewPager  https://www.jianshu.com/p/6b1008fcc082
+hongyang   https://blog.csdn.net/lmj623565791/article/details/39480503
+juejin  https://juejin.im/post/58e62f9fda2f60005fedf177#heading-6
