@@ -17,6 +17,7 @@ R.layout.xxx
 ### 生命周期
 
 ![Activity生命周期](https://developer.android.com/images/activity_lifecycle.png?hl=zh-cn)  
+![](https://upload-images.jianshu.io/upload_images/1467278-21c8544f417e6713.png?imageMogr2/auto-orient/strip|imageView2/2/w/550/format/webp)
 #### 1. 生命周期中各个方法的含义和作用
 （1）onCreate:create表示创建，这是Activity生命周期的第一个方法，也是我们在android开发中接触的最多的生命周期方法。它本身的作用是进行Activity的一些初始化工作，比如使用setContentView加载布局，对一些控件和变量进行初始化等。但也有很多人将很多与初始化无关的代码放在这，其实这是不规范的。此时Activity还在后台，不可见。所以动画不应该在这里初始化，因为看不到……
 

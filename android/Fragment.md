@@ -1,5 +1,11 @@
 ## fragment
 
+fragment是一种控制器对象，activity可委派它完成一些任务。通常这些任务就是管理用户界面。受管理的用户界面可以是一整屏或者屏幕的一部分。
+管理用户界面的fragment有成为UI fragment。它也有自己产生于布局文件的视图。fragment视图包含了用户可以交互的可视化UI元素。
+activity视图含有可供fragment视图插入的位置。如果有多个fragment要插入，activity视图也可提供多个位置。
+根据应用和用户的需求，可联合使用fragment和activity来组装或重新组装用户界面。在整个生命周期过程中，技术上来说activity的视图可以保持不变。因此不用担心会违反Android系统activity规则。
+
+
 ### 生命周期：
 1. Fragment不能独立存在，必须嵌入到Activity中
 2. Fragment具有自己的生命周期，接收它自己的事件，并可以在Activity运行时被添加或删除
@@ -81,6 +87,12 @@ activity托管UI fragment有如下两种方式：
   3.2 开启一个事务，通过调用beginTransaction方法开启。  
   3.3 向容器内加入Fragment，一般使用replace方法实现，需要传入容器的id和Fragment的实例。  
   3.4 提交事务，调用commit方法提交。  
+
+
+
+注意：
+如果在创建Fragment时要传入参数，必须要通过setArguments(Bundle bundle)方式添加，setArguments方法必须在fragment创建以后，添加给Activity前完成,而不建议通过为Fragment添加带参数的构造函数，因为通过setArguments()方式添加，在由于内存紧张导致Fragment被系统杀掉并恢复（re-instantiate）时能保留这些数据。
+
 
 
 

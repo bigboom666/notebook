@@ -1,0 +1,12 @@
+所以AlertDialog并不需要到布局文件中创建，而是在代码中通过构造器（AlertDialog.Builder）来构造标题、图标和按钮等内容的。
+
+步骤：
+创建构造器AlertDialog.Builder的对象；
+
+通过构造器的对象调用setTitle、setMessage等方法构造对话框的标题、信息和图标等内容；
+
+根据需要，设置正面按钮、负面按钮和中立按钮；
+
+调用create方法创建AlertDialog的对象；
+
+AlertDialog的对象调用show方法，让对话框在界面上显示。

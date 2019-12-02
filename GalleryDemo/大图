@@ -1,3 +1,131 @@
+view
+    setImage：load bitmap，starting with a given orientation setting, scale and center
+    setGestureDetector: onDoubleTap
+
+    onmeasure
+    ondraw 
+
+
+自己也要有个loader
+    接收的参数是uri/路径 ImageSource( Uri / path)
+
+    图片加载放在AsyncTask里
+
+calculateInSampleSize  计算缩放
+怎么区分缩放的调用
+
+ canvas.drawBitmap(tile.bitmap, matrix, bitmapPaint);
+
+
+
+activity:PrewviewActivity
+view：PhotoImageView   MediaSurfaceView
+
+
+
+##
+PrewviewActivity
+    protected void onCreate(Bundle savedInstanceState)
+                initView();
+        initData();
+        initEvent();
+
+    class:
+    ViewPagerAdapter
+        public int getCount()
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object object)
+        public Object instantiateItem(@NonNull ViewGroup container, int position)                          了解
+         //根据type判断图片或者视频，把对应view加入container
+        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object)
+
+
+##
+PhotoImageView extends ImageView
+
+    int status
+
+
+
+    setImage(position)
+    
+    
+    @Override  
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom)
+    protected void onDraw(Canvas canvas){根据status调用init,move,zoom}
+
+
+    scale
+    public void setScale(float scale)
+    public void addScale(float scale, float focusX, float focusY)
+
+    mMatrix
+    zoomHoming() 图片归位
+
+    nextScale(x, y)
+
+    initBitmap(canvas);
+    move(canvas);
+    zoom(canvas);
+
+ 
+    mDrawingRect  显示的区域
+    canvas.drawBitmap(drawable.mBitmap, drawable.mSrc, drawable.mDst, mPaint);
+
+
+GestureDetector implements View.OnTouchListener
+    private ScaleGestureDetector mScaleGestureDetector;
+    private GestureDetector mGestureDetector;
+
+    public boolean onTouch(View v, MotionEvent event)
+
+    class:
+    private class OnScaleGestureAdapter extends ScaleGestureDetector.SimpleOnScaleGestureListener
+        public boolean onScale(ScaleGestureDetector detector)     调用PhotoImageView里的addScale（）
+        public void onScaleEnd(ScaleGestureDetector detector)     调用zoomHoming()
+
+    private class OnGestureAdapter extends GestureDetector.SimpleOnGestureListener
+        onDown
+        onDoubleTap                                                调用nextScale(x, y)
+        onScroll
+        onFling
+        onSingleTapConfirmed
+        onLongPress
+        //调用PhotoImageView里对应的方法 并invalidate()重绘
+
+
+
+## 
+SurfaceVideoView
+    private GestureDetector gestureDetector;
+
+    private MediaPlayer mediaPlayer;
+    private AudioManager mAudioManager;
+    private SurfaceHolder holder;
+
+    play()
+
+
+class:
+    videoinfo  与 mediainfoBean 应该可以合并
+
+interface  OnVideoPlayingListener  回调接口，通知activity
+
+创建MediaPlayer对象，并让它加载指定的视频文件。可以是应用的资源文件、本地文件路径、或者URL。
+在界面布局文件中定义SurfaceView组件，并为SurfaceView的SurfaceHolder添加Callback监听器。
+调用MediaPlayer对象的setDisplay(SurfaceHolder sh)将所播放的视频图像输出到指定的SurfaceView组件。
+调用MediaPlayer对象的prepareAsync()或prepare()方法装载流媒体文件
+调用MediaPlayer对象的start()、stop()和pause()方法来控制视频的播放。
+————————————————
+版权声明：本文为CSDN博主「若尘风」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/liuzhi0724/article/details/81318816
+
+
+
+根据handler里的调用步骤看，究竟做了啥
+
+1. 压缩图片像素  采样率
+
+
 容器
 
 1. 缩放
@@ -14,11 +142,111 @@ data
 视频，视频的播放
 
 大图显示：
-ViewPager+Fragment适配器FragmentPagerAdapter中
+ViewPager+Pageradapter
+
+（Fragment适配器FragmentPagerAdapter中）
+
+根据类型不同，调用不同的imageView类，或者videoView类
 
 
 手势：
 自定义imageview   zoomImageView extends ImageView
+
+
+视频播放
+X 用的是已有的控件   MediaController  +  VideoView
+自定义  VideoView，   https://blog.csdn.net/HardWorkingAnt/article/details/72624335
+SurfaceView+MediaPlayer    https://blog.csdn.net/tzl0322/article/details/77414978
+ 
+
+TableLayout - viewPager - FileFragment/NetFragemnt  - TestSurfaceActivity
+
+
+public class **TestSurfaceActivity** extends AppCompatActivity implements View.OnClickListener
+
+activity_test_surface.xml
+<MysurfaceView>
+
+public class **MysurfaceView** extends SurfaceView implements
+        View.OnTouchListener
+        ,MediaPlayer.OnErrorListener
+        ,MediaPlayer.OnCompletionListener
+        ,MediaPlayer.OnVideoSizeChangedListener
+        ,SurfaceHolder.Callback
+
+
+
+
+
+
+
+区域解码：
+BitmapRegionDecoder
+普通图片和大图要不要判断，有没有判断什么要区域解码
+手势会不会有问题？
+
+
+
+区域解码和正常的图是在一起的一个view
+
+不同的点在哪里？要判断吗？
+
+图片再怎么大，都只加载屏幕那么大的区域
+缩放：降低采样率？？？
+
+1. 缩放
+2. 区域
+
+使用handler task,把耗时操作放子线程，需要时发送message调用
+
+判断图片的类型有啥用？？？
+
+抓住核心代码   抽出和直接用view不同的地方
+
+
+MultiPreviewActivity：
+public class MultiPreviewActivity extends AppCompatActivity {
+    private ViewPager mViewPager;
+    private ImagePageAdapter mAdapter;
+}
+
+
+public class IntensifyImageView extends View implements IntensifyImage,
+        IntensifyImageDelegate.Callback {
+    private Paint mPaint;
+
+    private Paint mTextPaint;
+
+    private Paint mBoardPaint;
+
+    private volatile Rect mDrawingRect = new Rect();
+
+    private OverScroller mScroller;
+
+    private IntensifyImageDelegate mDelegate;
+
+    private OnSingleTapListener mOnSingleTapListener;
+
+    private OnDoubleTapListener mOnDoubleTapListener;
+
+    private OnLongPressListener mOnLongPressListener;
+
+    private OnScaleChangeListener mOnScaleChangeListener;
+｝
+
+IntensifyImageDelegate.java:
+干嘛的？？  实现一些让View调用的方法。
+initialize 整一个容下图片的缩略图（容下一个屏幕的sampleSize--缩略图） - initScaleType 具体缩放 (垂直，mMatrix，imageArea)
+
+
+
+IntensifyImageAttacher.java    处理手势
+public class IntensifyImageAttacher implements View.OnTouchListener {
+    private IntensifyImageView mIntensifyView;
+    private ScaleGestureDetector mScaleGestureDetector;
+    private GestureDetector mGestureDetector;
+}
+
 
 
 
@@ -49,3 +277,30 @@ https://github.com/Gloomyer/ZoomImageView
 ViewPager  https://www.jianshu.com/p/6b1008fcc082
 hongyang   https://blog.csdn.net/lmj623565791/article/details/39480503
 juejin  https://juejin.im/post/58e62f9fda2f60005fedf177#heading-6
+
+
+
+1. 把监听和回调搞清楚
+    OnVideoPlayingListener  咋用的
+    view里设了一个listener
+
+    activity里用
+
+    复用的地方是被回调的，
+    定义的地方是发生这个事件的，调用这个函数的
+
+
+    setOnTouchListener(this);这个说明此处是被回调的
+    这个文件里一定有重写的方法，就是要被回调的方法
+
+
+2. media的异步加载
+   新线程
+   区别
+
+    
+3. 安卓中的多线程
+多线程可采用AsyncTask、继承Thread类、实现Runnable
+线程池
+
+
