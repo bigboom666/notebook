@@ -1,3 +1,77 @@
+https://www.jianshu.com/p/7c81d3742c38
+
+MyApplication11--IntensifyImage
+
+view
+    private volatile Rect mDrawingRect = new Rect();
+
+    initialize(){
+            初始化
+            new IntensifyImageAttacher(this);
+    }
+
+    ondraw
+        List<ImageDrawable> drawables = mDelegate.obtainImageDrawables(mDrawingRect);
+        画这些
+
+
+    mDrawingRect 
+    初始化赋值在哪
+
+
+Delegate
+    cache和区域加载怎么结合的？？
+    到底是区域加载还是缩放？？？
+    全部区域加载吗？
+
+    public void load(ImageDecoder decoder) {
+        mHandler.removeCallbacksAndMessages(null);
+        sendMessage(MSG_IMAGE_RELEASE);
+        sendMessage(MSG_IMAGE_SRC, decoder);
+    }
+
+    Cache:
+    1. LruCache缓存有必要吗？为什么要做cache？把一张图之前移动的区域存起来？
+        重写LruCache,增加level
+    2. Cache套Cache啥意思？有几个不同level的cache？
+        level对应采样率
+
+
+    Image 
+        BitmapRegionDecoder   mImageRegion
+
+        IntensifyImageCache mImageCaches
+        这个cache咋生成的？
+
+    ImageDrawable 
+    干啥的，用来画的bitmap？
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------
+ImageSource
+tile = true说明支持局部加载属性
+
+
+AlbumImageSelect
+    private Bitmap sourceBitmap;
+subsamplingScaleImageView
+    // Bitmap (preview or full image)
+    private Bitmap bitmap;
+
+    ImageViewState state
+
+
+
+
+
+
+-------------------------------------------------------------------
 view
     setImage：load bitmap，starting with a given orientation setting, scale and center
     setGestureDetector: onDoubleTap

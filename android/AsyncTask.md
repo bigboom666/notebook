@@ -33,6 +33,11 @@ public abstract class AsyncTask<Params, Progress, Result> {
 }
 ```
 
+# 使用
+[android - AsyncTask 的使用](https://www.jianshu.com/p/990669c6d4f2)
+
+
+
 # 参考
 [Android 多线程：这是一份详细的AsyncTask使用教程](https://blog.csdn.net/carson_ho/article/details/79314325)
 [Android 多线程：AsyncTask的原理 及其源码分析](https://blog.csdn.net/carson_ho/article/details/79314326)
