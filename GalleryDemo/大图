@@ -1,7 +1,11 @@
-map   
+callback
+        void onRequestInvalidate();
 
-cache 
+        boolean onRequestAwakenScrollBars();
 
+        void onScaleChange(float scale);
+
+ZoomAnimatorAdapter
 
 ------------------------------------------------------------------------------------------
 
