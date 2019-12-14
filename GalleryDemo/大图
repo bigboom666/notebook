@@ -7,6 +7,23 @@ callback
 
 ZoomAnimatorAdapter
 
+OverScroller和gesture怎么结合？？？     
+几个Scroller函数之间的关系
+
+mScroller.computeScrollOffset() true说明滚动尚未完成，false说明滚动已经完成。
+
+
+computeScroll() view类的函数
+
+https://juejin.im/entry/57cc5f08165abd0068f1c746
+View内容的滚动，而不是View位置的移动。当View的内容过长时，通过Scroll的方式，
+
+整个弹性滚动是靠着View绘制来驱动的，当调用OverScroller.startScroll()方法后，会触发View重绘，而在View.draw方法中就会调用上面的computeScroll方法。正如上述代码所示，在computeScroll方法中，获取当前的scrollX和scrollY，然后通过scrollTo来实现滚动，接着又通过postInvalidate方法触发下一次重绘，如此反复，直到整个滚动过程结束。
+
+
+
+https://juejin.im/entry/571a591a2e958a006be9f473
+view坐标
 ------------------------------------------------------------------------------------------
 
 https://www.jianshu.com/p/7c81d3742c38
